@@ -9,6 +9,7 @@ import {
 	TOKEN_METADATA_PROGRAM_ID,
 	SPL_ASSOCIATED_TOKEN_ACCOUNT_PROGRAM_ID,
 } from './helpers'
+import CountdownTimer from '../CountdownTimer'
 const {
 	metadata: { Metadata, MetadataProgram },
 } = programs
@@ -27,6 +28,9 @@ const MAX_CREATOR_LEN = 32 + 1 + 1
 const CandyMachine = ({ walletAddress }) => {
 	const [machineStats, setMachineStats] = useState(null)
 	const [mints, setMints] = useState([])
+
+	const [isMinting, setIsMinting] = useState(false)
+	const [isLoadingMints, setisLoadingMints] = useState(false)
 
 	// Actions
 	const fetchHashTable = async (hash, metadataEnabled) => {
@@ -118,6 +122,8 @@ const CandyMachine = ({ walletAddress }) => {
 
 	const mintToken = async () => {
 		try {
+			setIsMinting(true)
+
 			const mint = web3.Keypair.generate()
 			const token = await getTokenWallet(
 				walletAddress.publicKey,
@@ -202,12 +208,17 @@ const CandyMachine = ({ walletAddress }) => {
 						const { result } = notification
 						if (!result.err) {
 							console.log('NFT Minted!')
+
+							setIsMinting(false)
+							await getCandyMachineState()
 						}
 					}
 				},
 				{ commitment: 'processed' }
 			)
 		} catch (error) {
+			setIsMinting(false)
+
 			let message = error.msg || 'Minting failed! Please try again!'
 
 			if (!error.msg) {
@@ -316,6 +327,8 @@ const CandyMachine = ({ walletAddress }) => {
 			launchDateTimeString,
 		})
 
+		setisLoadingMints(true)
+
 		const data = await fetchHashTable(
 			process.env.REACT_APP_CANDY_MACHINE_ID,
 			true
@@ -334,6 +347,8 @@ const CandyMachine = ({ walletAddress }) => {
 				}
 			}
 		}
+
+		setisLoadingMints(false)
 	}
 
 	const renderMintedNFTs = () => (
@@ -349,6 +364,19 @@ const CandyMachine = ({ walletAddress }) => {
 		</div>
 	)
 
+	const renderDropDateTimer = () => {
+		const currDate = new Date()
+		const dropDate = new Date(machineStats.launchDate * 1000)
+
+		if (currDate < dropDate) {
+			console.log('Before Drop Time...')
+
+			return <CountdownTimer dropDate={dropDate} />
+		}
+
+		return <p>{`Drop Date: ${machineStats.launchDateTimeString}`}</p>
+	}
+
 	useEffect(() => {
 		getCandyMachineState()
 	}, [])
@@ -356,13 +384,22 @@ const CandyMachine = ({ walletAddress }) => {
 	return (
 		machineStats && (
 			<div className="machine-container">
-				<p>{`Drop Date: ${machineStats.launchDateTimeString}`}</p>
+				{renderDropDateTimer()}
+				{machineStats.itemsRedeemed === machineStats.itemsAvailable ? (
+					<p className="sub-text">Sold Out 🙊</p>
+				) : (
+					<button
+						className="cta-button mint-button"
+						onClick={mintToken}
+						disabled={isMinting}
+					>
+						Mint NFT
+					</button>
+				)}
 				<p>
 					{`Items Minted: ${machineStats.itemsRedeemed} / ${machineStats.itemsAvailable}`}
 				</p>
-				<button className="cta-button mint-button" onClick={mintToken}>
-					Mint NFT
-				</button>
+				{isLoadingMints && <p>LOADING MINTS...</p>}
 				{mints.length > 0 && renderMintedNFTs()}
 			</div>
 		)
