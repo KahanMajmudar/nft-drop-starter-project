@@ -1,0 +1,40 @@
+{
+	"name": "Castle",
+	"symbol": "",
+	"image": "0.png",
+	"attributes": [
+		{
+			"trait_type": "side",
+			"value": "defender"
+		},
+		{
+			"trait_type": "health",
+			"value": "2/3"
+		},
+		{
+			"trait_type": "speed",
+			"value": "2/3"
+		},
+		{
+			"trait_type": "difficulty",
+			"value": "2/3"
+		}
+	],
+	"collection": {
+		"name": "Sugar Rush 🍬"
+	},
+	"properties": {
+		"files": [
+			{
+				"uri": "0.png",
+				"type": "image/png"
+			}
+		],
+		"creators": [
+			{
+				"address": "Gn7EqZXAJoTGv58ambJs5MxdmtVxXTfowJSn5xcwpWbG",
+				"share": 100
+			}
+		]
+	}
+}

@@ -1,0 +1,26 @@
+{
+    "program": {
+        "uuid": "9MG8JD",
+        "config": "9MG8JDhXNXBVa7iLCjCTcypy1GFtsrGpiX2CfQQyj8iW"
+    },
+    "items": {
+        "0": {
+            "link": "https://arweave.net/dfYFNtLYpHFfYVIrR87tPp8ze3npyS3iiL30oTyOgWw",
+            "name": "Castle",
+            "onChain": true
+        },
+        "1": {
+            "link": "https://arweave.net/ugn7gW44NMkns7XCstsfzLNxDOGCmDd7OVQhUbijkXc",
+            "name": "Thermite",
+            "onChain": true
+        },
+        "2": {
+            "link": "https://arweave.net/jFcGyw6eNN65UmhGFCW1qH9ceQ7hwVzpn3VVRwy9OaM",
+            "name": "Zofia",
+            "onChain": true
+        }
+    },
+    "env": "devnet",
+    "cacheName": "temp",
+    "authority": "Gn7EqZXAJoTGv58ambJs5MxdmtVxXTfowJSn5xcwpWbG"
+}
